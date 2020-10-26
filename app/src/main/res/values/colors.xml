@@ -3,4 +3,14 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name="colorAccentActive">#1658AF</color><!--Click-->
+    <color name="colorAccentEnabled">#1a73e8</color>
+    <color name="colorAccentDisabled">#3B4E67</color>
+
+    <color name="buttonNormalColor">#FF9100</color>
+    <color name="buttonNormalPress">#FFD500</color>
+
+
+
 </resources>
