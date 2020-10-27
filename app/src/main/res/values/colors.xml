@@ -14,4 +14,10 @@
     <color name="sign_google_active">#659FFF</color>
 
 
+    <color name="button_ok_active">#00BC00</color>
+    <color name="button_ok_enabled">#00AA00</color>
+
+    <color name="button_cancel_active">#BC0000</color>
+    <color name="button_cancel_enabled">#AA0000</color>
+
 </resources>

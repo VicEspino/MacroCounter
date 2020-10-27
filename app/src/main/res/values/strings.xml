@@ -14,5 +14,10 @@
     <string name="_4000_calorias">4000 Calorias</string>
     <string name="_24_octubre_2020">24 Octubre 2020</string>
     <string name="logo_app">logo_app</string>
+    <string name="description">Description</string>
+    <string name="calor_as">Calorías</string>
+    <string name="add_calorias_today">Añadir calorías para hoy:</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 
 </resources>
