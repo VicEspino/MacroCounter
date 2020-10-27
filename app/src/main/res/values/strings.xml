@@ -10,5 +10,6 @@
     <string name="login_failed">"Login failed"</string>
     <string name="name_project">Name Project</string>
     <string name="prompt_user">User</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
 
 </resources>
