@@ -12,7 +12,6 @@ public class LoginViewModel extends ViewModel {
     public LoginViewModel() {
 
         this.logingUserStats = new MutableLiveData<User>();
-        logingUserStats.setValue(new User());
     }
 
     public MutableLiveData<User> getLogingUserStats() {

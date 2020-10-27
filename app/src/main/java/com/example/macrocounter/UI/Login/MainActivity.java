@@ -4,7 +4,9 @@ package com.example.macrocounter.UI.Login;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.example.macrocounter.R;
+import com.example.macrocounter.UI.UserLoged.UserLogedActivity;
 import com.example.macrocounter.UI.model.User;
 
 import static java.lang.Thread.sleep;
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     LoginViewModel loginViewModel;
     EditText editUsername;
     EditText editPass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         editUsername = findViewById(R.id.editUsername);
         editPass = findViewById(R.id.editPassword);
 
+
+
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         loginViewModel.getLogingUserStats().observe(this, new Observer<User>() {
@@ -41,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(User user) {
 
                 progressBarLogin.setVisibility(View.GONE);
+
+                if(user!=null)
+                    if(validateUser(user)){
+                        Intent myIntent = new Intent(MainActivity.this, UserLogedActivity.class);
+                        startActivity(myIntent);
+                        finish();
+                    }
 
             }
         });
@@ -59,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if(validateUser()){
-                            loginViewModel.getLogingUserStats().postValue(new User());
-                        }
+
+                        loginViewModel.getLogingUserStats().postValue(new User(editUsername.getText().toString(),editPass.getText().toString()));
+
                     }
                 }).start();
             }
@@ -79,9 +92,8 @@ public class MainActivity extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if(validateUser()){
-                            loginViewModel.getLogingUserStats().postValue(new User());
-                        }
+                        loginViewModel.getLogingUserStats().postValue(new User(editUsername.getText().toString(),editPass.getText().toString()));
+
                     }
                 }).start();
             }
@@ -91,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    boolean validateUser(){
-        if(!this.editPass.getText().toString().isEmpty() && !this.editUsername.getText().toString().isEmpty()){
+    boolean validateUser(User user){
+        if(!user.getUser().isEmpty() && !user.getPassword().isEmpty()){
             return true;
         }
         return false;

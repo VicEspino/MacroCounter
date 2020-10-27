@@ -11,5 +11,8 @@
     <string name="name_project">Name Project</string>
     <string name="prompt_user">User</string>
     <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="_4000_calorias">4000 Calorias</string>
+    <string name="_24_octubre_2020">24 Octubre 2020</string>
+    <string name="logo_app">logo_app</string>
 
 </resources>
