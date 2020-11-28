@@ -1,4 +1,4 @@
-package com.example.macrocounter;
+package com.example.macrocounter.UI.Login;
 
 
 import androidx.annotation.NonNull;
@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,15 +16,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.example.macrocounter.UI.Login.LoginViewModel;
+import com.example.macrocounter.R;
 import com.example.macrocounter.UI.UserLoged.UserLogedActivity;
 import com.example.macrocounter.UI.model.User;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.rpc.context.AttributeContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +39,7 @@ import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity {
 
+    private GoogleApiClient googleApiClient;
     LoginViewModel loginViewModel;
     MainActivity thisLoginActivity ;
     ProgressBar progressBarLogin;
@@ -40,8 +48,21 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore MacroDb;
     String userN;
     String pass;
+    public static final int SIGN_IN_CODE = 777;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+      /*  GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestId()
+                .build();
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this,  this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();*/
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -57,10 +78,16 @@ public class MainActivity extends AppCompatActivity {
        userN = editUsername.getText().toString();
         pass = editPass.getText().toString();
 
-      //  FirebaseFirestore db = FirebaseFirestore.getInstance();
         MacroDb = FirebaseFirestore.getInstance();
 
 
+       /* btnSignInGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                startActivityForResult(intent,SIGN_IN_CODE);
+            }
+        });*/
 
 
 
@@ -104,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         editPass.getText().toString()
                 );
 
-               /* new Thread(new Runnable() {
+               new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -117,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                         loginViewModel.getLogingUserStats().postValue(new User(editUsername.getText().toString(),editPass.getText().toString()));
 
                     }
-                }).start();*/
+                }).start();
             }
         });
 
@@ -145,7 +172,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*///////google login
+    @Override
+    protected void onActivityResult(int re,int res, Intent data) {
 
+        super.onActivityResult(re, res, data);
+
+        if(re== SIGN_IN_CODE){
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSingInResult(result);
+        }
+    }
+
+    private void handleSingInResult(GoogleSignInResult result) {
+        if(result.isSuccess()){
+
+        }else{
+            Toast.makeText(this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
+        }
+    }*/
 
     CollectionReference mCollecRefUsers;
 
@@ -165,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
                             Map<String,Object> vic =documentSnapshot.getData();
 
                             if(username.equals(vic.get("UserName"))&&password.equals(vic.get("Password"))){
-                                //startActivityVic(username);
+                             //   startActivityMa(username);
 
                             }else if(username.equals(vic.get("UserName"))&&!password.equals(vic.get("Password"))){
                                 androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(thisLoginActivity);
@@ -202,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
-                                                           // startActivityVic(username);
+                                                     //      startActivityMa(username);
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -249,23 +294,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-   /* public void startActivityVic(String username){
+   /* public void startActivityMa(String username){
         setResult(Activity.RESULT_OK);
 
-        Intent myIntent = new Intent(MainActivity.this, MainActivity.class);
-        myIntent.putExtra("Username", username); //Optional parameters
+        Intent myIntent = new Intent(this, LoginViewModel.class);
+        myIntent.putExtra("UserName", username); //Optional parameters
         MainActivity.this.startActivity(myIntent);
-
         finish();
-    }*/
-
-
-
-   /* private void crearDatos(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("UserName", userN);
-        map.put("Pasword", pass);
-        macroccounter.collection("Usuario").document().set(map);
     }*/
 
 
