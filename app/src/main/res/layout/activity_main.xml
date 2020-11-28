@@ -127,52 +127,6 @@
         app:layout_constraintTop_toBottomOf="@+id/editPassword"
         app:layout_constraintVertical_bias="0.195" />
 
-    <LinearLayout
-        android:id="@+id/btnSignInGoogle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:clickable="true"
-        android:focusable="true"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true"
-        android:addStatesFromChildren="true"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="64dp"
-        android:background="@drawable/button_state_sign_google"
-        android:enabled="true"
-        android:fontFamily="@font/product_sans_bold"
-        android:orientation="horizontal"
-        android:paddingLeft="1dp"
-        android:paddingTop="1dp"
-        android:paddingRight="1dp"
-        android:paddingBottom="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-        app:layout_constraintVertical_bias="0.5">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/btn_google_light_pressed_mdpi" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:fontFamily="@font/product_sans_medium"
-            android:padding="8dp"
-            android:text="@string/sign_in_with_google"
-            android:textColor="#FFF"
-            android:textSize="14sp"
-
-            />
-    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

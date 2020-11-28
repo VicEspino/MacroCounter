@@ -16,52 +16,36 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.macrocounter.R;
 import com.example.macrocounter.UI.UserLoged.UserLogedActivity;
 import com.example.macrocounter.UI.model.User;
-import com.google.android.gms.auth.api.Auth;
+
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.rpc.context.AttributeContext;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity {
 
-    private GoogleApiClient googleApiClient;
     LoginViewModel loginViewModel;
     MainActivity thisLoginActivity ;
     ProgressBar progressBarLogin;
     EditText editUsername;
     EditText editPass;
-    FirebaseFirestore MacroDb;
+    FirebaseFirestore macroDb;
     String userN;
     String pass;
-    public static final int SIGN_IN_CODE = 777;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-      /*  GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestId()
-                .build();
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,  this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();*/
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -69,36 +53,21 @@ public class MainActivity extends AppCompatActivity {
         this.thisLoginActivity=this;
 
         Button btnSignInRegister = findViewById(R.id.btnLogin);
-        LinearLayout btnSignInGoogle = findViewById(R.id.btnSignInGoogle);
         progressBarLogin = findViewById(R.id.progress_circular_login);
 
         editUsername = findViewById(R.id.editUsername);
         editPass = findViewById(R.id.editPassword);
 
-       userN = editUsername.getText().toString();
+        userN = editUsername.getText().toString();
         pass = editPass.getText().toString();
-
-        MacroDb = FirebaseFirestore.getInstance();
-
-
-       /* btnSignInGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-                startActivityForResult(intent,SIGN_IN_CODE);
-            }
-        });*/
-
-
+        macroDb = FirebaseFirestore.getInstance();
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         loginViewModel.getLogingUserStats().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
-
                 progressBarLogin.setVisibility(View.GONE);
-
                 if(user!=null)
                     if(validateUser(user)){
                         /*Intent myIntent = new Intent(MainActivity.this, UserLogedActivity.class);
@@ -110,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         btnSignInRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 if(editUsername.getText().toString().isEmpty()){
                     editUsername.setError("This field is required.");
                     progressBarLogin.setVisibility(View.GONE);
-
                     return;
                 }
                 if(editPass.getText().toString().isEmpty()){
@@ -126,12 +93,6 @@ public class MainActivity extends AppCompatActivity {
                     progressBarLogin.setVisibility(View.GONE);
                     return;
                 }
-
-           /*     login(
-                        editUsername.getText().toString(),
-                        editPass.getText().toString()
-                );
-*/
                new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -146,41 +107,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-        btnSignInGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressBarLogin.setVisibility(View.VISIBLE);
-                /*login(
-                        editUsername.getText().toString(),
-                        editPass.getText().toString()
-                );*/
-            }
-        });
-
-
     }
 
-    /*///////google login
-    @Override
-    protected void onActivityResult(int re,int res, Intent data) {
 
-        super.onActivityResult(re, res, data);
-
-        if(re== SIGN_IN_CODE){
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSingInResult(result);
-        }
-    }
-
-    private void handleSingInResult(GoogleSignInResult result) {
-        if(result.isSuccess()){
-
-        }else{
-            Toast.makeText(this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
-        }
-    }*/
 
     CollectionReference mCollecRefUsers;
 
@@ -190,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
         progressBarLogin.setVisibility(View.VISIBLE);
 
-        mCollecRefUsers =  MacroDb.collection("Usuario");
+        mCollecRefUsers =  macroDb.collection("Usuario");
 
         mCollecRefUsers.document(username).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -217,8 +146,6 @@ public class MainActivity extends AppCompatActivity {
                                 builder.create().show();
                             }
 
-
-                            System.out.println("asd");
                         }else{
                             progressBarLogin.setVisibility(View.GONE);
                             androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(thisLoginActivity);
@@ -258,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
                                             /*ignore*/
                                         }
                                     });
-
                             builder.create().show();
                         }
                     }
@@ -273,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
                                 .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-
                                     }
                                 });
                         builder.create().show();
