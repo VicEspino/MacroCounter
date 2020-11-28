@@ -101,9 +101,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if(user!=null)
                     if(validateUser(user)){
-                        Intent myIntent = new Intent(MainActivity.this, UserLogedActivity.class);
+                        /*Intent myIntent = new Intent(MainActivity.this, UserLogedActivity.class);
                         startActivity(myIntent);
-                        finish();
+                        finish();*/
+                        login(user);
                     }
 
             }
@@ -126,23 +127,20 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                login(
+           /*     login(
                         editUsername.getText().toString(),
                         editPass.getText().toString()
                 );
-
+*/
                new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                          //  crearDatos();
-                            sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                        loginViewModel.getLogingUserStats().postValue(new User(editUsername.getText().toString(),editPass.getText().toString()));
-
+                      //  crearDatos();
+                        User user = new User(
+                                editUsername.getText().toString(),
+                                editPass.getText().toString()
+                        );
+                        loginViewModel.getLogingUserStats().postValue(user);
                     }
                 }).start();
             }
@@ -154,18 +152,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressBarLogin.setVisibility(View.VISIBLE);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        loginViewModel.getLogingUserStats().postValue(new User(editUsername.getText().toString(),editPass.getText().toString()));
-
-                    }
-                }).start();
+                /*login(
+                        editUsername.getText().toString(),
+                        editPass.getText().toString()
+                );*/
             }
         });
 
@@ -194,6 +184,8 @@ public class MainActivity extends AppCompatActivity {
 
     CollectionReference mCollecRefUsers;
 
+    public void login(User user){login(user.getUser(),user.getPassword());}
+
     public void login(final String username, final String password) {
 
         progressBarLogin.setVisibility(View.VISIBLE);
@@ -210,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                             Map<String,Object> vic =documentSnapshot.getData();
 
                             if(username.equals(vic.get("UserName"))&&password.equals(vic.get("Password"))){
-                             //   startActivityMa(username);
+                                startActivityLoged(username);
 
                             }else if(username.equals(vic.get("UserName"))&&!password.equals(vic.get("Password"))){
                                 androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(thisLoginActivity);
@@ -247,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
-                                                     //      startActivityMa(username);
+                                                           startActivityLoged(username);
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -264,8 +256,6 @@ public class MainActivity extends AppCompatActivity {
                                     .setNegativeButton("No",new  DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             /*ignore*/
-
-
                                         }
                                     });
 
@@ -286,7 +276,6 @@ public class MainActivity extends AppCompatActivity {
 
                                     }
                                 });
-
                         builder.create().show();
                     }
                 });
@@ -294,14 +283,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-   /* public void startActivityMa(String username){
+    public void startActivityLoged(String username){
         setResult(Activity.RESULT_OK);
 
-        Intent myIntent = new Intent(this, LoginViewModel.class);
+        Intent myIntent = new Intent(this, UserLogedActivity.class);
         myIntent.putExtra("UserName", username); //Optional parameters
         MainActivity.this.startActivity(myIntent);
         finish();
-    }*/
+    }
 
 
     boolean validateUser(User user){
