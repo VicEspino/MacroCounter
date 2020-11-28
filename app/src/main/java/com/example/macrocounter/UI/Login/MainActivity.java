@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore macroDb;
     String userN;
     String pass;
+    //comentairio
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
