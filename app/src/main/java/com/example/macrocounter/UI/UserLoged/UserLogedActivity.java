@@ -13,7 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.macrocounter.R;
+import com.example.macrocounter.UI.model.HistorialItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 public class UserLogedActivity extends AppCompatActivity {
 
@@ -28,7 +31,7 @@ public class UserLogedActivity extends AppCompatActivity {
          myThis = this;
 
         RecyclerView recyclerViewHistorial = findViewById(R.id.recyclerHistory);
-        adapterHistorial = new AdapterHistorial();
+        adapterHistorial = new AdapterHistorial(getDataFromServer());
         recyclerViewHistorial.setAdapter(adapterHistorial);
         recyclerViewHistorial.setItemAnimator(new DefaultItemAnimator());
         recyclerViewHistorial.setLayoutManager(new LinearLayoutManager(this));
@@ -79,5 +82,15 @@ public class UserLogedActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private ArrayList<HistorialItem> getDataFromServer() {
+
+        ArrayList<HistorialItem> historialItemArrayList = new ArrayList<>();
+
+        //call firebase for the data
+
+
+        return historialItemArrayList;
     }
 }

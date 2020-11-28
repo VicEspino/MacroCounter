@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.macrocounter.R;
@@ -20,19 +21,24 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
     // Attributes and constructor omitted
     private static final String TAG = AdapterHistorial.class.getSimpleName();
 
-    private static final int ITEM_COUNT = 50;
+    private final int ITEM_COUNT;
     private List<HistorialItem> items;
 
-    public AdapterHistorial() {
+    private AdapterHistorial () throws Exception {
+        //no using
+        throw new Exception("No use this constructor.");
+    }
+    public AdapterHistorial(@NonNull ArrayList<HistorialItem> historialLista) {
         super();
-
+        this.ITEM_COUNT = historialLista.size();
+        this.items = items;
         // Create some items
-        items = new ArrayList<>();
+       /* items = new ArrayList<>();
         for (int i = 0; i < ITEM_COUNT; ++i) {
             items.add(
                     new HistorialItem( 2312 ,  new Date(65413) )
             );
-        }
+        }*/
     }
 
     @Override
