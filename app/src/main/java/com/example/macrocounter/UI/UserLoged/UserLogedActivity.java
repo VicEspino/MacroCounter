@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ public class UserLogedActivity extends AppCompatActivity {
 
     AdapterHistorial adapterHistorial;
     AppCompatActivity myThis;
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +32,15 @@ public class UserLogedActivity extends AppCompatActivity {
 
          myThis = this;
 
+        Intent intent = getIntent();
+        this.userName = intent.getStringExtra("UserName");
+
         RecyclerView recyclerViewHistorial = findViewById(R.id.recyclerHistory);
-        adapterHistorial = new AdapterHistorial(getDataFromServer());
+        adapterHistorial = new AdapterHistorial(getDataFromServer(userName));
         recyclerViewHistorial.setAdapter(adapterHistorial);
         recyclerViewHistorial.setItemAnimator(new DefaultItemAnimator());
         recyclerViewHistorial.setLayoutManager(new LinearLayoutManager(this));
+
 
         FloatingActionButton fabAddCalories = findViewById(R.id.fab_addCalories);
         fabAddCalories.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +90,7 @@ public class UserLogedActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<HistorialItem> getDataFromServer() {
+    private ArrayList<HistorialItem> getDataFromServer(String userName) {
 
         ArrayList<HistorialItem> historialItemArrayList = new ArrayList<>();
 
