@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.macrocounter.R;
 import com.example.macrocounter.UI.model.HistorialItem;
@@ -32,6 +34,7 @@ public class UserLogedActivity extends AppCompatActivity {
 
          myThis = this;
 
+
         Intent intent = getIntent();
         this.userName = intent.getStringExtra("UserName");
 
@@ -50,7 +53,9 @@ public class UserLogedActivity extends AppCompatActivity {
                     /*Editing*/
                     final AlertDialog.Builder builder = new AlertDialog.Builder(myThis);
                     View dialogEdit = LayoutInflater.from(myThis).inflate(R.layout.dialog_edit_subred, null);
-                    final EditText txtEditAmount = dialogEdit.findViewById(R.id.txt_edit_node_amount);
+                    final EditText txtEditHidrato = dialogEdit.findViewById(R.id.txt_edit_node_hidrato);
+                    final EditText txtEditProteina = dialogEdit.findViewById(R.id.txt_edit_node_proteina);
+                    final EditText txtEditGrasa = dialogEdit.findViewById(R.id.txt_edit_node_grasa);
 
                     Button buttonOk = dialogEdit.findViewById(R.id.button_ok);
                     Button buttonCancel = dialogEdit.findViewById(R.id.button_cancel);
@@ -62,6 +67,17 @@ public class UserLogedActivity extends AppCompatActivity {
                     buttonOk.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+
+                            int hidrato = Integer.parseInt(String.valueOf(txtEditHidrato.getText()));
+                            int proteina = Integer.parseInt(String.valueOf(txtEditProteina.getText()));
+                            int grasa = Integer.parseInt(String.valueOf(txtEditGrasa.getText()));
+
+                            int calorias = (hidrato*4)+(proteina*4)+(grasa*9);
+                          //  Toast.makeText(getApplicationContext(),Integer.toString(calorias),Toast.LENGTH_SHORT).show();
+
+
+                                adapterHistorial.updateList(calorias);
+
 
                             //connect firebase to update value and set the value in the label caloriesAmount
 

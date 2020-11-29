@@ -1,10 +1,13 @@
 package com.example.macrocounter.UI.UserLoged;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,7 +16,10 @@ import com.example.macrocounter.R;
 import com.example.macrocounter.UI.model.HistorialItem;
 import com.example.macrocounter.UI.model.User;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,16 +28,20 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
     private static final String TAG = AdapterHistorial.class.getSimpleName();
 
     private final int ITEM_COUNT;
-    private List<HistorialItem> items;
+    private static List<HistorialItem> items;
 
-    private AdapterHistorial () throws Exception {
+    static HistorialItem itemN;
+ //   private ArrayAdapter<HistorialItem> adapter = new ArrayAdapter<HistorialItem>(this,items);
+
+
+    AdapterHistorial() throws Exception {
         //no using
         throw new Exception("No use this constructor.");
     }
     public AdapterHistorial(@NonNull ArrayList<HistorialItem> historialLista) {
         super();
         this.ITEM_COUNT = historialLista.size();
-        this.items = items;
+        this.items = historialLista;
         // Create some items
        /* items = new ArrayList<>();
         for (int i = 0; i < ITEM_COUNT; ++i) {
@@ -45,6 +55,45 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.historial_item, parent, false);
         return new ViewHolder(v);
+        //notifyItemChanged(0);
+    }
+
+    public void updateList(int cal){
+       /*  Calendar currentTime = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy");
+       sdf.format(currentTime.getTime());*/
+
+
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
+        Date todayDate = new Date();
+        String thisDate = currentDate.format(todayDate);
+
+
+        if(items.isEmpty()){
+            items.add(new HistorialItem(cal,thisDate));
+            notifyItemInserted(0);
+
+        }
+        else{
+
+
+                if(thisDate.equals(items.get(0).getDate())) {
+                    itemN =items.get(0);
+                    cal+=itemN.getCalorieAmount();
+                    itemN.setCalorieAmount(cal);
+                    itemN.setDate(thisDate);
+                    notifyItemChanged(0);
+                }
+                else{
+                    items.add(new HistorialItem(cal,thisDate));
+                    notifyItemInserted(0);
+                }
+
+
+
+        }
+
+
     }
 
     @Override
