@@ -18,6 +18,8 @@ import android.widget.ProgressBar;
 
 import com.example.macrocounter.R;
 import com.example.macrocounter.UI.UserLoged.UserLogedActivity;
+import com.example.macrocounter.UI.cifrado.CifradoPropio;
+import com.example.macrocounter.UI.cifrado.Transposicion;
 import com.example.macrocounter.UI.model.User;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -72,7 +74,11 @@ public class MainActivity extends AppCompatActivity {
                         /*Intent myIntent = new Intent(MainActivity.this, UserLogedActivity.class);
                         startActivity(myIntent);
                         finish();*/
-                        login(user);
+                        try {
+                            login(user);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
             }
@@ -97,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                       //  crearDatos();
                         User user = new User(
-                                editUsername.getText().toString(),
-                                editPass.getText().toString()
+                                Transposicion.cifrar( editUsername.getText().toString(),true ),
+                                Transposicion.cifrar( editPass.getText().toString(),true )
                         );
                         loginViewModel.getLogingUserStats().postValue(user);
                     }
@@ -112,15 +118,19 @@ public class MainActivity extends AppCompatActivity {
 
     CollectionReference mCollecRefUsers;
 
-    public void login(User user){login(user.getUser(),user.getPassword());}
+    public void login(User user) throws Exception {login(user.getUser(),user.getPassword());}
 
-    public void login(final String username, final String password) {
+
+    public void login(final String username, final String password) throws Exception {
+
+        final String userNameDecrypted =  Transposicion.decifrar(username);
+        final String passwordDecrypted = Transposicion.decifrar(password);
 
         progressBarLogin.setVisibility(View.VISIBLE);
 
         mCollecRefUsers =  macroDb.collection("Usuario");
 
-        mCollecRefUsers.document(username).get()
+        mCollecRefUsers.document( userNameDecrypted ).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -129,10 +139,21 @@ public class MainActivity extends AppCompatActivity {
                             progressBarLogin.setVisibility(View.GONE);
                             Map<String,Object> vic =documentSnapshot.getData();
 
-                            if(username.equals(vic.get("UserName"))&&password.equals(vic.get("Password"))){
-                                startActivityLoged(username);
+                            String userNameDB = null;
+                            String passwordDB = null;
+                            try {
+                                userNameDB = Transposicion.decifrar( (String) vic.get("UserName"));
+                                 passwordDB = Transposicion.decifrar ((String) vic.get("Password"));
 
-                            }else if(username.equals(vic.get("UserName"))&&!password.equals(vic.get("Password"))){
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            if(userNameDecrypted.equals(userNameDB)&&passwordDecrypted.equals(passwordDB)){
+                                startActivityLoged(userNameDecrypted);
+
+                            }else if(userNameDecrypted.equals(userNameDB)&&!passwordDecrypted.equals(passwordDB) ){
+
                                 androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(thisLoginActivity);
                                 builder.setTitle("Wrong password.")
                                         .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
@@ -160,23 +181,27 @@ public class MainActivity extends AppCompatActivity {
                                             map.put("Password",password);
 
                                             /* db.collection("vlsm").document("users").*/
-                                            mCollecRefUsers.document(username)
-                                                    .set(map)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                           startActivityLoged(username);
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(thisLoginActivity);
-                                                            builder.setMessage("Try later")
-                                                                    .setTitle("Can't creat it");
-                                                            builder.show();
-                                                        }
-                                                    });
+                                            try {
+                                                mCollecRefUsers.document(userNameDecrypted )
+                                                        .set(map)
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                               startActivityLoged(userNameDecrypted);
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                AlertDialog.Builder builder = new AlertDialog.Builder(thisLoginActivity);
+                                                                builder.setMessage("Try later")
+                                                                        .setTitle("Can't creat it");
+                                                                builder.show();
+                                                            }
+                                                        });
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     })
                                     .setNegativeButton("No",new  DialogInterface.OnClickListener() {
