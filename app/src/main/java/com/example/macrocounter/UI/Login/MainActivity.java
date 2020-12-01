@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -234,9 +235,9 @@ public class MainActivity extends AppCompatActivity {
         mCollecRefUsers =  macroDb.collection("LogsIn");
 
         Map<String,Object> vic =new HashMap<>();
-        vic.put(username, Calendar.getInstance().getTime().toString());
+        vic.put(Calendar.getInstance().getTime().toString(), Calendar.getInstance().getTime().toString());
 
-        mCollecRefUsers.document( username ).set(vic);
+        mCollecRefUsers.document( username ).set(vic, SetOptions.merge());
 
         Intent myIntent = new Intent(this, UserLogedActivity.class);
         myIntent.putExtra("UserName", username); //Optional parameters
