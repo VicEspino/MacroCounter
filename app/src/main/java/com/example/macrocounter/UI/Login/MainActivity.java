@@ -28,6 +28,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -230,6 +231,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void startActivityLoged(String username){
         setResult(Activity.RESULT_OK);
+        mCollecRefUsers =  macroDb.collection("LogsIn");
+
+        Map<String,Object> vic =new HashMap<>();
+        vic.put(username, Calendar.getInstance().getTime().toString());
+
+        mCollecRefUsers.document( username ).set(vic);
 
         Intent myIntent = new Intent(this, UserLogedActivity.class);
         myIntent.putExtra("UserName", username); //Optional parameters
