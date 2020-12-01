@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                       //  crearDatos();
                         User user = new User(
-                                Transposicion.cifrar( editUsername.getText().toString(),true ),
-                                Transposicion.cifrar( editPass.getText().toString(),true )
+                                CifradoPropio.cifrar( editUsername.getText().toString() ),
+                                CifradoPropio.cifrar( editPass.getText().toString() )
                         );
                         loginViewModel.getLogingUserStats().postValue(user);
                     }
@@ -118,13 +118,13 @@ public class MainActivity extends AppCompatActivity {
 
     CollectionReference mCollecRefUsers;
 
-    public void login(User user) throws Exception {login(user.getUser(),user.getPassword());}
+    public void login(User user) {login(user.getUser(),user.getPassword());}
 
 
-    public void login(final String username, final String password) throws Exception {
+    public void login(final String username, final String password)  {
 
-        final String userNameDecrypted =  Transposicion.decifrar(username);
-        final String passwordDecrypted = Transposicion.decifrar(password);
+        final String userNameDecrypted =  CifradoPropio.decifrar(username);
+        final String passwordDecrypted = CifradoPropio.decifrar(password);
 
         progressBarLogin.setVisibility(View.VISIBLE);
 
@@ -141,13 +141,9 @@ public class MainActivity extends AppCompatActivity {
 
                             String userNameDB = null;
                             String passwordDB = null;
-                            try {
-                                userNameDB = Transposicion.decifrar( (String) vic.get("UserName"));
-                                 passwordDB = Transposicion.decifrar ((String) vic.get("Password"));
+                            userNameDB = CifradoPropio.decifrar( (String) vic.get("UserName"));
+                            passwordDB = CifradoPropio.decifrar ((String) vic.get("Password"));
 
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
 
                             if(userNameDecrypted.equals(userNameDB)&&passwordDecrypted.equals(passwordDB)){
                                 startActivityLoged(userNameDecrypted);
