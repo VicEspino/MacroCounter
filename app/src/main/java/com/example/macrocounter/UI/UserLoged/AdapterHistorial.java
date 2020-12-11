@@ -27,10 +27,8 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
     // Attributes and constructor omitted
     private static final String TAG = AdapterHistorial.class.getSimpleName();
 
-    private final int ITEM_COUNT;
     private List<HistorialItem> items;
 
-    static HistorialItem itemN;
  //   private ArrayAdapter<HistorialItem> adapter = new ArrayAdapter<HistorialItem>(this,items);
 
 
@@ -40,7 +38,6 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
     }
     public AdapterHistorial(@NonNull ArrayList<HistorialItem> historialLista) {
         super();
-        this.ITEM_COUNT = historialLista.size();
         this.items = historialLista;
         // Create some items
        /* items = new ArrayList<>();
@@ -76,6 +73,7 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
         }
         else{
 
+            HistorialItem itemN;
 
                 if(thisDate.equals(items.get(0).getDate())) {
                     itemN =items.get(0);
@@ -88,8 +86,6 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
                     items.add(new HistorialItem(cal,thisDate));
                     notifyItemInserted(0);
                 }
-
-
 
         }
 

@@ -137,24 +137,25 @@ public class UserLogedActivity extends AppCompatActivity {
 
         //call firebase for the data
         mCollecRefCal =  macroDb.collection("Entrada");
-        mCollecRefCal.document().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        mCollecRefCal.document(userName).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
                     Map<String,Object> map =documentSnapshot.getData();
 
-                    SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
-                    Date todayDate = new Date();
-                    String thisDate = currentDate.format(todayDate);
+                   /* SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
+                    Date todayDate = new Date();*/
+                    /*String thisDate = currentDate.format(todayDate);*/
 
                     for (Map.Entry<String, Object> entry : map.entrySet()) {
 
-                        todayDate.setTime(Long.parseLong(entry.getKey()));
-                        thisDate = currentDate.format(todayDate);
-                        historialItemArrayList.add (new HistorialItem(Integer.parseInt((String) entry.getValue()),thisDate));
+                        //todayDate.setTime(Long.parseLong(entry.getKey()));
+                        /*thisDate = currentDate.format(todayDate);*/
+                         historialItemArrayList.add(new HistorialItem((int) (long) entry.getValue(), entry.getKey()));
 
 
                     }
+                    adapterHistorial.notifyDataSetChanged();
 
                 }
             }
@@ -172,10 +173,14 @@ public class UserLogedActivity extends AppCompatActivity {
       //  HashMap<String, Object> map2 = new HashMap<>();
       //  map2.put(map);
 
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
+        Date todayDate = new Date();
+        String thisDate = currentDate.format(todayDate);
+
         HashMap<String, Object> map = new HashMap<>();
 
      //   map.put("id",username);
-        map.put(new Date().getTime()+"", calorias);
+        map.put(thisDate, calorias);
      //   map.put("CalorieAmount",calorias);
 
       //  macroDb.collection("Entrada").document(username).set(map);
