@@ -55,7 +55,7 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
         //notifyItemChanged(0);
     }
 
-    public void updateList(int cal){
+    public int updateList(int cal){
        /*  Calendar currentTime = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy");
        sdf.format(currentTime.getTime());*/
@@ -65,6 +65,7 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
         Date todayDate = new Date();
         String thisDate = currentDate.format(todayDate);
 
+        int calorieCount = cal;
 
         if(items.isEmpty()){
             items.add(new HistorialItem(cal,thisDate));
@@ -78,6 +79,7 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
                 if(thisDate.equals(items.get(0).getDate())) {
                     itemN =items.get(0);
                     cal+=itemN.getCalorieAmount();
+                    calorieCount = cal;
                     itemN.setCalorieAmount(cal);
                     itemN.setDate(thisDate);
                     notifyItemChanged(0);
@@ -89,6 +91,7 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
 
         }
 
+        return calorieCount;
 
     }
 

@@ -100,8 +100,8 @@ public class UserLogedActivity extends AppCompatActivity {
 
                             //connect firebase to update value and set the value in the label caloriesAmount
 
-                            CalRe(userName,calorias);
-                            adapterHistorial.updateList(calorias);
+                            CalRe(userName,adapterHistorial.updateList(calorias));
+
 
                             /*currentProject.getListNodos().get(position).setNodesAmount(Integer.parseInt(txtEditAmount.getText().toString()));
                             currentProject.getListNodos().get(position).setSubredDescriptcion(txtEditAmount.getText().toString());
@@ -181,9 +181,9 @@ public class UserLogedActivity extends AppCompatActivity {
         map.put(thisDate, calorias);
      //   map.put("CalorieAmount",calorias);
 
-        macroDb.collection("Entrada").document(username).set(map);
+        //macroDb.collection("Entrada").document(username).set(map);
 
-        //macroDb.collection("Entrada").document( username).set(map, SetOptions.merge());
+        macroDb.collection("Entrada").document( username).set(map, SetOptions.merge());
     }
 
 
