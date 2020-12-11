@@ -26,7 +26,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirestoreRegistrar;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.SetOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,6 +45,7 @@ public class UserLogedActivity extends AppCompatActivity {
     String userName;
     String userAux;
     FirebaseFirestore macroDb;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,7 @@ public class UserLogedActivity extends AppCompatActivity {
         recyclerViewHistorial.setAdapter(adapterHistorial);
         recyclerViewHistorial.setItemAnimator(new DefaultItemAnimator());
         recyclerViewHistorial.setLayoutManager(new LinearLayoutManager(this));
+
 
 
         FloatingActionButton fabAddCalories = findViewById(R.id.fab_addCalories);
@@ -123,28 +129,58 @@ public class UserLogedActivity extends AppCompatActivity {
         });
 
     }
+    CollectionReference mCollecRefCal;
 
     private ArrayList<HistorialItem> getDataFromServer(String userName) {
 
-        ArrayList<HistorialItem> historialItemArrayList = new ArrayList<>();
+        final ArrayList<HistorialItem> historialItemArrayList = new ArrayList<>();
 
         //call firebase for the data
+        mCollecRefCal =  macroDb.collection("Entrada");
+        mCollecRefCal.document().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    Map<String,Object> map =documentSnapshot.getData();
+
+                    SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
+                    Date todayDate = new Date();
+                    String thisDate = currentDate.format(todayDate);
+
+                    for (Map.Entry<String, Object> entry : map.entrySet()) {
+
+                        todayDate.setTime(Long.parseLong(entry.getKey()));
+                        thisDate = currentDate.format(todayDate);
+                        historialItemArrayList.add (new HistorialItem(Integer.parseInt((String) entry.getValue()),thisDate));
+
+
+                    }
+
+                }
+            }
+        });
+
 
 
         return historialItemArrayList;
     }
 
-    CollectionReference mCollecRefCal;
+
     public void CalRe(String username, int calorias){
         mCollecRefCal =  macroDb.collection("Entrada");
 
+      //  HashMap<String, Object> map2 = new HashMap<>();
+      //  map2.put(map);
+
         HashMap<String, Object> map = new HashMap<>();
 
-        map.put("id",username);
-        map.put("date", new Date().getTime());
-        map.put("CalorieAmount",calorias);
+     //   map.put("id",username);
+        map.put(new Date().getTime()+"", calorias);
+     //   map.put("CalorieAmount",calorias);
 
-        macroDb.collection("Entrada").document(username).set(map);
+      //  macroDb.collection("Entrada").document(username).set(map);
+
+        macroDb.collection("Entrada").document( username).set(map, SetOptions.merge());
     }
 
 
