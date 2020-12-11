@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     EditText editUsername;
     EditText editPass;
     FirebaseFirestore macroDb;
-    String userN;
+    public static String userN;
     String pass;
     //comentairio
 

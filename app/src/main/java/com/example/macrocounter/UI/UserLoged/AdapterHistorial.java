@@ -28,7 +28,7 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
     private static final String TAG = AdapterHistorial.class.getSimpleName();
 
     private final int ITEM_COUNT;
-    private static List<HistorialItem> items;
+    private List<HistorialItem> items;
 
     static HistorialItem itemN;
  //   private ArrayAdapter<HistorialItem> adapter = new ArrayAdapter<HistorialItem>(this,items);
