@@ -7,7 +7,21 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:fontFamily">@font/product_sans_medium</item>
 
+        <item name="android:windowActivityTransitions">true</item>
+
+
+
     </style>
+    <style name="WindowAnimations">
+        <item name="android:windowActivityTransitions">true</item>
+
+        <item name="android:activityOpenEnterAnimation">
+            @anim/enter_slide_from_right</item>
+        <item name="android:activityOpenExitAnimation">
+            @anim/exit_slide_to_left</item>
+
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

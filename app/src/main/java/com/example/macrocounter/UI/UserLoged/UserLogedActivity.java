@@ -44,6 +44,7 @@ public class UserLogedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_loged);
+        overridePendingTransition(R.anim.enter_slide_from_right,R.anim.exit_slide_to_left);
 
          myThis = this;
 

@@ -8,7 +8,6 @@
     android:paddingEnd="8dp"
     android:paddingStart="8dp"
     android:paddingBottom="8dp"
-
     >
 
 
@@ -20,7 +19,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/item_chat_external" />
+        tools:listitem="@layout/item_chat_external"
+
+        />
 
     <LinearLayout
         android:id="@+id/container_send_msg"

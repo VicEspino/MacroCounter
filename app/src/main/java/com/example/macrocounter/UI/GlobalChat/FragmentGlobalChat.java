@@ -18,6 +18,8 @@ public class FragmentGlobalChat extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_global_chat);
+        overridePendingTransition(R.anim.enter_slide_from_right,R.anim.exit_slide_to_left);
+
         Intent intent = getIntent();
         this.userName = intent.getStringExtra("UserName");
 
