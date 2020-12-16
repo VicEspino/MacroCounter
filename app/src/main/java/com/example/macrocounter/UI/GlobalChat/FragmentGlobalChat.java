@@ -2,9 +2,12 @@ package com.example.macrocounter.UI.GlobalChat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,19 +16,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.macrocounter.R;
 import com.example.macrocounter.UI.UserLoged.UserLogedActivity;
 import com.example.macrocounter.UI.model.Message;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 
 public class FragmentGlobalChat extends AppCompatActivity {
 
@@ -33,7 +38,8 @@ public class FragmentGlobalChat extends AppCompatActivity {
     private FirebaseFirestore firebase;
     private CollectionReference chatGlobalCollectionReference;
     private AdapterGlobalChat adapterGlobalChat;
-
+    private ImageButton imgBtn_SendMsg;
+    private EditText editText_typeMessage;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,13 +67,101 @@ public class FragmentGlobalChat extends AppCompatActivity {
                 finish();
             }
         });
+
+        imgBtn_SendMsg = findViewById(R.id.btn_sendMessage);
+        imgBtn_SendMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String messageToSend = editText_typeMessage.getText().toString();
+
+                if(!messageToSend.isEmpty()){
+                    sendMessage(messageToSend);
+                    editText_typeMessage.getText().clear();
+                }else{
+                    editText_typeMessage.setError("Ingrese texto");
+                }
+
+            }
+        });
+
+        editText_typeMessage = findViewById(R.id.txt_edit_type_message);
+
+        setChatListener();
+
     }
+
+    public void setChatListener(){
+        this.chatGlobalCollectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+
+                if (e != null) {
+                    Log.w("GlobalChat", "listen:error", e);
+                    return;
+                }
+
+                String source = (snapshots == null)?"Error": snapshots.getMetadata().hasPendingWrites() ? "Local" : "Server";
+
+                Log.d("PendingWrites ",source);
+
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    QueryDocumentSnapshot document = dc.getDocument();
+                    System.out.println("mamada");
+                    switch (dc.getType()) {
+                        case ADDED:
+                           // Log.d(TAG, "New city: " + dc.getDocument().getData());
+                            addMessageToList(document);
+
+                            break;
+                        case MODIFIED:
+                           // Log.d(TAG, "Modified city: " + dc.getDocument().getData());
+                            break;
+                        case REMOVED:
+                            //Log.d(TAG, "Removed city: " + dc.getDocument().getData());
+                            break;
+                    }
+                }
+
+            }
+        });
+    }
+    private void addMessageToList(QueryDocumentSnapshot dc){
+
+        String userNameMsg = (String) dc.get("user");
+        String msg = (String) dc.get("msg");
+        //String firebaseDate = (String) dc.get("date");
+        Timestamp messageDate = ((Timestamp) dc.get("date"));
+        Date date = messageDate==null?new Date(): messageDate.toDate();
+
+        messageArrayList.add(new Message(userNameMsg,msg,date));
+
+    }
+
+
+    public void sendMessage (String message){
+
+        HashMap<String,Object> newMsg = new HashMap<>();
+        newMsg.put("date", FieldValue.serverTimestamp());
+        newMsg.put("user",this.userName);
+        newMsg.put("msg",message);
+
+        this.chatGlobalCollectionReference.document().set(newMsg).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                adapterGlobalChat.notifyDataSetChanged();
+
+            }
+        });
+
+    }
+    ArrayList<Message> messageArrayList;
 
     public ArrayList<Message> getCurrentMessages(final String userName){
 
-        final ArrayList<Message> messageArrayList = new ArrayList<>();
+        messageArrayList = new ArrayList<>();
 
-        this.chatGlobalCollectionReference.orderBy("date", Query.Direction.ASCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        /*this.chatGlobalCollectionReference.orderBy("date", Query.Direction.ASCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
@@ -91,7 +185,7 @@ public class FragmentGlobalChat extends AppCompatActivity {
             public void onFailure(@NonNull Exception e) {
                 //do something
             }
-        });
+        });*/
 
 
           /*      addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
