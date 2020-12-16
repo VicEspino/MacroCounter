@@ -43,7 +43,7 @@ public class FragmentGlobalChat extends AppCompatActivity {
         this.chatGlobalCollectionReference = this.firebase.collection("GlobalChat");
 
         RecyclerView recyclerViewChat = findViewById(R.id.recycler_global_chat);
-        this.adapterGlobalChat = new AdapterGlobalChat(getCurrentMessage(userName));
+        this.adapterGlobalChat = new AdapterGlobalChat(getCurrentMessages(userName));
         recyclerViewChat.setAdapter(adapterGlobalChat);
         recyclerViewChat.setItemAnimator(new DefaultItemAnimator());
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
@@ -63,7 +63,7 @@ public class FragmentGlobalChat extends AppCompatActivity {
         });
     }
 
-    public ArrayList<Message> getCurrentMessage(final String userName){
+    public ArrayList<Message> getCurrentMessages(final String userName){
 
         final ArrayList<Message> messageArrayList = new ArrayList<>();
 
