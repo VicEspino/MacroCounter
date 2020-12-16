@@ -34,12 +34,13 @@ import java.util.HashMap;
 
 public class FragmentGlobalChat extends AppCompatActivity {
 
-    private String userName;
+    public static String userName;
     private FirebaseFirestore firebase;
     private CollectionReference chatGlobalCollectionReference;
     private AdapterGlobalChat adapterGlobalChat;
     private ImageButton imgBtn_SendMsg;
     private EditText editText_typeMessage;
+    RecyclerView recyclerViewChat;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,14 +49,14 @@ public class FragmentGlobalChat extends AppCompatActivity {
         this.firebase = FirebaseFirestore.getInstance();
         this.chatGlobalCollectionReference = this.firebase.collection("GlobalChat");
 
-        RecyclerView recyclerViewChat = findViewById(R.id.recycler_global_chat);
+        this.recyclerViewChat = findViewById(R.id.recycler_global_chat);
         this.adapterGlobalChat = new AdapterGlobalChat(getCurrentMessages(userName));
         recyclerViewChat.setAdapter(adapterGlobalChat);
         recyclerViewChat.setItemAnimator(new DefaultItemAnimator());
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
 
         Intent intent = getIntent();
-        this.userName = intent.getStringExtra("UserName");
+        userName = intent.getStringExtra("UserName");
 
         FloatingActionButton fabChangeHistory = findViewById(R.id.fab_history);
         fabChangeHistory.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +116,8 @@ public class FragmentGlobalChat extends AppCompatActivity {
 
                             break;
                         case MODIFIED:
-                           // Log.d(TAG, "Modified city: " + dc.getDocument().getData());
+                           Log.d("MODIFIED", "Modified city: " + dc.getDocument().getData());
+
                             break;
                         case REMOVED:
                             //Log.d(TAG, "Removed city: " + dc.getDocument().getData());
@@ -133,8 +135,9 @@ public class FragmentGlobalChat extends AppCompatActivity {
         //String firebaseDate = (String) dc.get("date");
         Timestamp messageDate = ((Timestamp) dc.get("date"));
         Date date = messageDate==null?new Date(): messageDate.toDate();
-
-        messageArrayList.add(new Message(userNameMsg,msg,date));
+        int indexMsg = messageArrayList.size();
+        messageArrayList.add(messageArrayList.size(),new Message(userNameMsg,msg,date));
+        adapterGlobalChat.notifyItemChanged(indexMsg);
 
     }
 
@@ -143,13 +146,15 @@ public class FragmentGlobalChat extends AppCompatActivity {
 
         HashMap<String,Object> newMsg = new HashMap<>();
         newMsg.put("date", FieldValue.serverTimestamp());
-        newMsg.put("user",this.userName);
+        newMsg.put("user",userName);
         newMsg.put("msg",message);
 
         this.chatGlobalCollectionReference.document().set(newMsg).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                adapterGlobalChat.notifyDataSetChanged();
+                recyclerViewChat.scrollToPosition(adapterGlobalChat.getItemCount());
+                adapterGlobalChat.notifyItemChanged(adapterGlobalChat.getItemCount());
+                recyclerViewChat.scrollToPosition(adapterGlobalChat.getItemCount());
 
             }
         });

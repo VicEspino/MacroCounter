@@ -18,7 +18,7 @@
             android:layout_width="@dimen/icon_img_msg"
             android:layout_height="@dimen/icon_img_msg"
             android:layout_margin="8dp"
-            android:src="@drawable/icon_img_msg"
+            android:src="@drawable/ic_baseline_sentiment_very_satisfied_48_red"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

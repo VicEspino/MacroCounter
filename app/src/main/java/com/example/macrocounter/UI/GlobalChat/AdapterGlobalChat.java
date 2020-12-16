@@ -32,9 +32,18 @@ public class AdapterGlobalChat extends RecyclerView.Adapter<AdapterGlobalChat.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_external, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
 
         return new ViewHolder(v);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        if(items.get(position).getUser().equals(FragmentGlobalChat.userName)){
+            return R.layout.item_chat_owned;
+        }
+        return R.layout.item_chat_external;
     }
 
     @Override

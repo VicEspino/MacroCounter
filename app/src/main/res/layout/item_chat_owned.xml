@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
+    app:cardUseCompatPadding="true"
+    android:foreground="?android:attr/selectableItemBackground"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,12 +31,24 @@
             android:layout_width="@dimen/icon_img_msg"
             android:layout_height="@dimen/icon_img_msg"
             android:layout_margin="8dp"
-            android:src="@drawable/icon_img_msg"
+            android:src="@drawable/ic_baseline_sentiment_very_satisfied_48_blue"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/txt_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="21:45"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_msg"
+
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
