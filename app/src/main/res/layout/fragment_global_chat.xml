@@ -1,17 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.GlobalChat.FragmentGlobalChat">
+    tools:context=".UI.GlobalChat.FragmentGlobalChat"
+    android:paddingEnd="8dp"
+    android:paddingStart="8dp"
+    android:paddingBottom="8dp"
+
+    >
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_global_chat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/item_chat_external"
-        />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/container_send_msg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/item_chat_external" />
+
+    <LinearLayout
+        android:id="@+id/container_send_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
 
 
-</FrameLayout>
+        >
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Type a message           "
+            android:layout_gravity="center"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+
+            />
+        <ImageButton
+            android:id="@+id/button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+
+            android:background="@drawable/button_ok_state"
+            android:src="@drawable/ic_baseline_send_24"
+
+            />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
