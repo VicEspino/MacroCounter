@@ -32,7 +32,7 @@ public class AdapterGlobalChat extends RecyclerView.Adapter<AdapterGlobalChat.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.historial_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_external, parent, false);
 
         return new ViewHolder(v);
     }
@@ -42,7 +42,7 @@ public class AdapterGlobalChat extends RecyclerView.Adapter<AdapterGlobalChat.Vi
         final Message item = items.get(position);
 
         holder.txtMessage.setText( item.getMessageContent() );
-
+        holder.txtTime.setText(item.getMessageTime());
     }
 
     @Override
@@ -52,12 +52,15 @@ public class AdapterGlobalChat extends RecyclerView.Adapter<AdapterGlobalChat.Vi
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView txtMessage;
+        TextView txtTime;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            txtMessage =  itemView.findViewById(R.id.txt_msg);
+            txtMessage = itemView.findViewById(R.id.txt_msg);
+            txtTime = itemView.findViewById(R.id.txt_time);
 
         }
     }
