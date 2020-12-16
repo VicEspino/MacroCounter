@@ -32,13 +32,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
 
-
         >
 
         <EditText
+            android:id="@+id/txt_edit_type_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Type a message           "
+            android:hint="@string/type_a_message"
             android:layout_gravity="center"
             android:textSize="30sp"
             android:layout_weight="1"
@@ -46,7 +46,7 @@
 
             />
         <ImageButton
-            android:id="@+id/button"
+            android:id="@+id/btn_sendMessage"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="8dp"
@@ -58,5 +58,16 @@
 
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:src="@drawable/ic_baseline_history_48"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/buttonNormalColor"
+        app:layout_constraintBottom_toTopOf="@id/container_send_msg"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

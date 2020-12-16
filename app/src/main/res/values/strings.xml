@@ -25,5 +25,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="data_mensaje_recibido">Data Mensaje Recibido</string>
     <string name="data_mensaje_enviado">Data Mensaje Enviado</string>
+    <string name="type_a_message">Type a message</string>
 
 </resources>
