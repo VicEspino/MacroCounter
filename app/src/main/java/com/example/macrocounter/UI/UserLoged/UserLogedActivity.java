@@ -1,33 +1,26 @@
 package com.example.macrocounter.UI.UserLoged;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.macrocounter.R;
-import com.example.macrocounter.UI.cifrado.CifradoPropio;
+import com.example.macrocounter.UI.GlobalChat.FragmentGlobalChat;
 import com.example.macrocounter.UI.model.HistorialItem;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirestoreRegistrar;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
@@ -51,6 +44,7 @@ public class UserLogedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_loged);
+        overridePendingTransition(R.anim.enter_slide_from_right,R.anim.exit_slide_to_left);
 
          myThis = this;
 
@@ -123,6 +117,17 @@ public class UserLogedActivity extends AppCompatActivity {
                     alertDialog.show();
 
                 }
+            }
+        });
+
+        FloatingActionButton fabChangeChat = findViewById(R.id.fab_chat);
+        fabChangeChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(UserLogedActivity.this, FragmentGlobalChat.class);
+                myIntent.putExtra("UserName",userName);
+                startActivity(myIntent);
+                finish();
             }
         });
 

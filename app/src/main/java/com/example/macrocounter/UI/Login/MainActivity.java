@@ -1,12 +1,6 @@
 package com.example.macrocounter.UI.Login;
 
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,12 +10,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.macrocounter.R;
 import com.example.macrocounter.UI.UserLoged.UserLogedActivity;
 import com.example.macrocounter.UI.cifrado.CifradoPropio;
-import com.example.macrocounter.UI.cifrado.Transposicion;
 import com.example.macrocounter.UI.model.User;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -29,7 +27,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -235,7 +234,9 @@ public class MainActivity extends AppCompatActivity {
         mCollecRefUsers =  macroDb.collection("LogsIn");
 
         Map<String,Object> vic =new HashMap<>();
-        vic.put(Calendar.getInstance().getTime().toString(), Calendar.getInstance().getTime().toString());
+        SimpleDateFormat currentDateAcessed = new SimpleDateFormat();
+        String currentDaterFormated = currentDateAcessed.format(new Date());
+        vic.put(currentDaterFormated,currentDaterFormated);
 
         mCollecRefUsers.document( username ).set(vic, SetOptions.merge());
 
@@ -247,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     boolean validateUser(User user){
-        if(!user.getUser().isEmpty() && !user.getPassword().isEmpty()){
+        if(!user.getUser().isEmpty() || !user.getPassword().isEmpty()){
             return true;
         }
         return false;
