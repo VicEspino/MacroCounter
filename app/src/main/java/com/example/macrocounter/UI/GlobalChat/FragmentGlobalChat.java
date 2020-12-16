@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.macrocounter.R;
 import com.example.macrocounter.UI.UserLoged.UserLogedActivity;
+import com.example.macrocounter.UI.cifrado.RandomCifrado;
 import com.example.macrocounter.UI.model.Message;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class FragmentGlobalChat extends AppCompatActivity {
 
@@ -48,6 +50,7 @@ public class FragmentGlobalChat extends AppCompatActivity {
         overridePendingTransition(R.anim.enter_slide_from_right,R.anim.exit_slide_to_left);
         this.firebase = FirebaseFirestore.getInstance();
         this.chatGlobalCollectionReference = this.firebase.collection("GlobalChat");
+        this.randomCifrado = new RandomCifrado();
 
         this.recyclerViewChat = findViewById(R.id.recycler_global_chat);
         this.adapterGlobalChat = new AdapterGlobalChat(getCurrentMessages(userName));
@@ -130,8 +133,9 @@ public class FragmentGlobalChat extends AppCompatActivity {
     }
     private void addMessageToList(QueryDocumentSnapshot dc){
 
-        String userNameMsg = (String) dc.get("user");
-        String msg = (String) dc.get("msg");
+
+        String userNameMsg = randomCifrado.descifrar((String) Objects.requireNonNull(dc.get("user")));
+        String msg = randomCifrado.descifrar((String) Objects.requireNonNull(dc.get("msg")));
         //String firebaseDate = (String) dc.get("date");
         Timestamp messageDate = ((Timestamp) dc.get("date"));
         Date date = messageDate==null?new Date(): messageDate.toDate();
@@ -141,13 +145,13 @@ public class FragmentGlobalChat extends AppCompatActivity {
 
     }
 
-
+    RandomCifrado randomCifrado;
     public void sendMessage (String message){
 
         HashMap<String,Object> newMsg = new HashMap<>();
         newMsg.put("date", FieldValue.serverTimestamp());
-        newMsg.put("user",userName);
-        newMsg.put("msg",message);
+        newMsg.put("user",  randomCifrado.cifrar(userName));
+        newMsg.put("msg",randomCifrado.cifrar(message));
 
         this.chatGlobalCollectionReference.document().set(newMsg).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
