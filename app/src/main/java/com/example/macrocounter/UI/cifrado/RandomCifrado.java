@@ -54,7 +54,7 @@ public class RandomCifrado {
             case 0:
                 int indexPalito = msgToDecrypt.lastIndexOf("|")+1;
                 int cifradoValue = Integer.parseInt(msgToDecrypt.substring( indexPalito ) );
-                encryptedMsg = Cesar.desencriptar(msgToDecrypt.substring(0,indexPalito),cifradoValue);
+                encryptedMsg = Cesar.desencriptar(msgToDecrypt.substring(0,indexPalito-1),cifradoValue);
                 break;
             case 1:
                 encryptedMsg = CifradoPropio.decifrar(msgToDecrypt);
