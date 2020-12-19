@@ -71,7 +71,7 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
 
             if(indexToInstert == -1){
                 items.add(new HistorialItem(cal,todayDate));
-                notifyItemInserted(0);
+                notifyItemInserted(items.size());
                 return calorieCount;
             }
 
