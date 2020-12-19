@@ -87,7 +87,7 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
         final HistorialItem item = items.get(position);
 
         holder.txtCalorieAmount.setText((item.getCalorieAmount()+""));
-        holder.txtDate.setText(item.getDate().toString());
+        holder.txtDate.setText(item.getHistorialItemTime());
     }
 
     @Override

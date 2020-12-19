@@ -8,6 +8,7 @@ public class HistorialItem {
     private int calorieAmount;
     private Date historialItemTime;
     public static SimpleDateFormat FORMAT_DATE_ITEM_HISTORIAL = new SimpleDateFormat("dd/MMMM/yyyy");
+    private String timeStringed;
 
     public HistorialItem(int calorieAmount, Date date) {
         this.calorieAmount = calorieAmount;
@@ -38,8 +39,9 @@ public class HistorialItem {
 
     public String getHistorialItemTime(){
 
-        String time = FORMAT_DATE_ITEM_HISTORIAL.format(this.historialItemTime);
+        if(this.timeStringed == null)
+            this.timeStringed = FORMAT_DATE_ITEM_HISTORIAL.format(this.historialItemTime);
 
-        return time;
+        return timeStringed;
     }
 }
