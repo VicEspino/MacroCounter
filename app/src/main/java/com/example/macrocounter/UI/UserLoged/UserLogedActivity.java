@@ -23,7 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -154,7 +154,15 @@ public class UserLogedActivity extends AppCompatActivity {
 
                         //todayDate.setTime(Long.parseLong(entry.getKey()));
                         /*thisDate = currentDate.format(todayDate);*/
-                         historialItemArrayList.add(new HistorialItem((int) (long) entry.getValue(), entry.getKey()));
+                        Date parseDate = new Date();
+                        try {
+                            parseDate = HistorialItem.FORMAT_DATE_ITEM_HISTORIAL.parse(entry.getKey());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        historialItemArrayList.add(
+                                 new HistorialItem((int) (long) entry.getValue(), parseDate)
+                         );
 
 
                     }
@@ -176,9 +184,9 @@ public class UserLogedActivity extends AppCompatActivity {
       //  HashMap<String, Object> map2 = new HashMap<>();
       //  map2.put(map);
 
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
+        //SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
         Date todayDate = new Date();
-        String thisDate = currentDate.format(todayDate);
+        String thisDate = HistorialItem.FORMAT_DATE_ITEM_HISTORIAL.format(todayDate);
 
         HashMap<String, Object> map = new HashMap<>();
 

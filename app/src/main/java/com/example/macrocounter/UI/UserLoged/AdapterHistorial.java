@@ -1,25 +1,17 @@
 package com.example.macrocounter.UI.UserLoged;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.macrocounter.R;
 import com.example.macrocounter.UI.model.HistorialItem;
-import com.example.macrocounter.UI.model.User;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -61,38 +53,48 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
        sdf.format(currentTime.getTime());*/
 
 
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
+        //SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
         Date todayDate = new Date();
-        String thisDate = currentDate.format(todayDate);
+       // String thisDate = currentDate.format(todayDate);
 
         int calorieCount = cal;
 
         if(items.isEmpty()){
-            items.add(new HistorialItem(cal,thisDate));
+            items.add(new HistorialItem(cal,todayDate));
             notifyItemInserted(0);
 
         }
         else{
 
             HistorialItem itemN;
+            int indexToInstert = hoyRegistrado(HistorialItem.FORMAT_DATE_ITEM_HISTORIAL.format(todayDate));
 
-                if(thisDate.equals(items.get(0).getDate())) {
-                    itemN =items.get(0);
-                    cal+=itemN.getCalorieAmount();
-                    calorieCount = cal;
-                    itemN.setCalorieAmount(cal);
-                    itemN.setDate(thisDate);
-                    notifyItemChanged(0);
-                }
-                else{
-                    items.add(new HistorialItem(cal,thisDate));
-                    notifyItemInserted(0);
-                }
+            if(indexToInstert == -1){
+                items.add(new HistorialItem(cal,todayDate));
+                notifyItemInserted(0);
+                return calorieCount;
+            }
+
+            itemN =items.get(indexToInstert);
+            cal+=itemN.getCalorieAmount();
+            calorieCount = cal;
+            itemN.setCalorieAmount(cal);
+            notifyItemChanged(indexToInstert);
 
         }
 
         return calorieCount;
 
+    }
+
+
+    public int hoyRegistrado(String date){
+        for (int indexHistorial = 0; indexHistorial < items.size(); indexHistorial++) {
+            if(items.get(indexHistorial).getHistorialItemTime().equals(date)){
+                return indexHistorial;
+            }
+        }
+        return -1;
     }
 
     @Override

@@ -1,25 +1,25 @@
 package com.example.macrocounter.UI.model;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class HistorialItem {
 
-    int calorieAmount;
-    String date ;
+    private int calorieAmount;
+    private Date historialItemTime;
+    public static SimpleDateFormat FORMAT_DATE_ITEM_HISTORIAL = new SimpleDateFormat("dd/MMMM/yyyy");
 
-    public HistorialItem(int calorieAmount, String date) {
+    public HistorialItem(int calorieAmount, Date date) {
         this.calorieAmount = calorieAmount;
-        this.date = date;
+        this.historialItemTime = date;
     }
 
     public int getCalorieAmount() {
         return calorieAmount;
     }
 
-    public String getDate() {
-        return date;
+    public Date getDate() {
+        return historialItemTime;
     }
 
     public void setCalorieAmount(int calorie){
@@ -27,8 +27,19 @@ public class HistorialItem {
         calorieAmount=calorie;
     }
 
-    public void setDate(String date){
+    public void setDate(Date date){
 
-        this.date=date;
+        this.historialItemTime=date;
+    }
+
+    public Date getHistorialItemFullDate() {
+        return historialItemTime;
+    }
+
+    public String getHistorialItemTime(){
+
+        String time = FORMAT_DATE_ITEM_HISTORIAL.format(this.historialItemTime);
+
+        return time;
     }
 }
