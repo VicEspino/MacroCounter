@@ -84,24 +84,20 @@ public class UserLogedActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
 
+                            if(txtEditHidrato.getText().toString().isEmpty())
+                                txtEditHidrato.setText(0+"");
+                            if(txtEditGrasa.getText().toString().isEmpty())
+                                txtEditGrasa.setText(0+"");
+                            if(txtEditProteina.getText().toString().isEmpty())
+                                txtEditProteina.setText(0+"");
+
                             int hidrato = Integer.parseInt(String.valueOf(txtEditHidrato.getText()));
                             int proteina = Integer.parseInt(String.valueOf(txtEditProteina.getText()));
                             int grasa = Integer.parseInt(String.valueOf(txtEditGrasa.getText()));
 
                             int calorias = (hidrato*4)+(proteina*4)+(grasa*9);
-                          //  Toast.makeText(getApplicationContext(),Integer.toString(calorias),Toast.LENGTH_SHORT).show();
 
-
-                            //connect firebase to update value and set the value in the label caloriesAmount
-
-                            CalRe(userName,adapterHistorial.updateList(calorias));
-
-
-                            /*currentProject.getListNodos().get(position).setNodesAmount(Integer.parseInt(txtEditAmount.getText().toString()));
-                            currentProject.getListNodos().get(position).setSubredDescriptcion(txtEditAmount.getText().toString());
-                            currentProject.recalculateNodesRange();
-
-                            adapterSubRedesProject.notifyDataSetChanged();*/
+                            calRe(userName,adapterHistorial.updateList(calorias));
 
                             alertDialog.dismiss();
                         }
@@ -138,7 +134,6 @@ public class UserLogedActivity extends AppCompatActivity {
 
         final ArrayList<HistorialItem> historialItemArrayList = new ArrayList<>();
 
-        //call firebase for the data
         mCollecRefCal =  macroDb.collection("Entrada");
         mCollecRefCal.document(userName).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -146,9 +141,6 @@ public class UserLogedActivity extends AppCompatActivity {
                 if(documentSnapshot.exists()){
                     Map<String,Object> map =documentSnapshot.getData();
 
-                   /* SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
-                    Date todayDate = new Date();*/
-                    /*String thisDate = currentDate.format(todayDate);*/
 
                     for (Map.Entry<String, Object> entry : map.entrySet()) {
 
@@ -178,23 +170,15 @@ public class UserLogedActivity extends AppCompatActivity {
     }
 
 
-    public void CalRe(String username, int calorias){
+    public void calRe(String username, int calorias){
         mCollecRefCal =  macroDb.collection("Entrada");
 
-      //  HashMap<String, Object> map2 = new HashMap<>();
-      //  map2.put(map);
-
-        //SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
         Date todayDate = new Date();
         String thisDate = HistorialItem.FORMAT_DATE_ITEM_HISTORIAL.format(todayDate);
 
         HashMap<String, Object> map = new HashMap<>();
 
-     //   map.put("id",username);
         map.put(thisDate, calorias);
-     //   map.put("CalorieAmount",calorias);
-
-        //macroDb.collection("Entrada").document(username).set(map);
 
         macroDb.collection("Entrada").document( username).set(map, SetOptions.merge());
     }

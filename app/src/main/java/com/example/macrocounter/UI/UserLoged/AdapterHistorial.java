@@ -16,12 +16,9 @@ import java.util.Date;
 import java.util.List;
 
 public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.ViewHolder> {
-    // Attributes and constructor omitted
     private static final String TAG = AdapterHistorial.class.getSimpleName();
 
     private List<HistorialItem> items;
-
- //   private ArrayAdapter<HistorialItem> adapter = new ArrayAdapter<HistorialItem>(this,items);
 
 
     AdapterHistorial() throws Exception {
@@ -31,13 +28,7 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
     public AdapterHistorial(@NonNull ArrayList<HistorialItem> historialLista) {
         super();
         this.items = historialLista;
-        // Create some items
-       /* items = new ArrayList<>();
-        for (int i = 0; i < ITEM_COUNT; ++i) {
-            items.add(
-                    new HistorialItem( 2312 ,  new Date(65413) )
-            );
-        }*/
+
     }
 
     @Override
@@ -48,14 +39,8 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
     }
 
     public int updateList(int cal){
-       /*  Calendar currentTime = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy");
-       sdf.format(currentTime.getTime());*/
 
-
-        //SimpleDateFormat currentDate = new SimpleDateFormat("dd/MMMM/yyyy");
         Date todayDate = new Date();
-       // String thisDate = currentDate.format(todayDate);
 
         int calorieCount = cal;
 
@@ -120,5 +105,4 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.View
             txtDate = itemView.findViewById(R.id.txtDate);
         }
     }
-    // ViewHolder definition omitted
 }
